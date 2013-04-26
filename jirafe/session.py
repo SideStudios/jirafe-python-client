@@ -32,7 +32,7 @@ class JirafeSession(object):
             self.invalidate()
             return self.get_profile(1)
         else:
-            return r.text
+            return r.json()
 
     def get_site(self):
         profile = self.get_profile()

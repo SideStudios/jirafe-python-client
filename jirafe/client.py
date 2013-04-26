@@ -24,4 +24,4 @@ class JirafeClient(object):
             session.invalidate()
             return self._put(session, path, data, 1)
         else:
-            return r.text
+            return r.json()
