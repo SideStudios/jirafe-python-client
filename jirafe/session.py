@@ -66,7 +66,7 @@ class UsernameSession(JirafeSession):
         r = requests.post(self.token_url, data=data)
 
         if r.status_code is 200:
-            return  r.json()['access_token']
+            return r.json()['access_token']
 
 class AuthorizationHeaderSession(JirafeSession):
     def __init__(self, site_id, auth_header, **kwargs):
