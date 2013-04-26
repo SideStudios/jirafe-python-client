@@ -69,7 +69,7 @@ class UsernameSession(JirafeSession):
             return  r.json()['access_token']
 
 class AuthorizationHeaderSession(JirafeSession):
-    def __init(self, site_id, auth_header, **kwargs):
+    def __init__(self, site_id, auth_header, **kwargs):
         self.auth_header = auth_header
         super(AuthorizationHeaderSession, self).__init__(site_id, **kwargs)
 
