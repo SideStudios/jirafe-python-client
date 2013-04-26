@@ -2,14 +2,16 @@
 
 # Install
 ```
-pip install git+https://github.com/jirafe/jirafe-python-client#egg=jirafe-python-client
+pip install git+ssh://git@github.com:jirafe/jirafe-python-client.git#egg=jirafe-python-client
 ```
 
 # Usage
 ```python
-session = JirafeSession('username', 'password', 'site-id', 'https://accounts.jirafe.com/oauth2/access_token', 'client-id', 'client-secret')
+session = UsernameSession('site_id', 'username', 'password', 'client_id', 'client_secret')
 
-client = JirafeClient('https://api.jirafe.com/')
+profile = session.get_profile()
 
-client.product_change(session, product_dict)
+client = JirafeClient()
+
+response = client.product_change(session, product_dict)
 ```

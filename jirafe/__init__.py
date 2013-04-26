@@ -1,2 +1,4 @@
 from client import JirafeClient
-from client import JirafeSession
+from session import JirafeSession
+from session import UsernameSession
+from session import AuthorizationHeaderSession
