@@ -19,9 +19,9 @@ class JirafeClient(object):
 
         r = requests.put(self.api_url + path, **options)
 
-        if r.status_code is not 200 and retry < 1:
+        if r.status_code not in (200,503) and retry < 1:
             session.invalidate()
-            return self._put(path, data, 1)
+            return self._put(session, path, data, 1)
         else:
             return r.json()
 
