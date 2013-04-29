@@ -3,7 +3,7 @@ import requests
 class JirafeSession(object):
     def __init__(self,
                  site_id,
-                 auth_url='https://accounts.jirafe.com/oauth2/auth',
+                 auth_url='https://accounts.jirafe.com/oauth2/authorize',
                  token_url='https://accounts.jirafe.com/oauth2/access_token',
                  profile_url='https://accounts.jirafe.com/accounts/profile'):
         self.access_token = None
