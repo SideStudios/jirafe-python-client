@@ -2,7 +2,7 @@
 
 ## Install
 ```
-pip install git+ssh://git@github.com:jirafe/jirafe-python-client.git#egg=jirafe-python-client
+pip install git+ssh://git@github.com/jirafe/jirafe-python-client.git#egg=jirafe-python-client
 ```
 
 ## Usage
