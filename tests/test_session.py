@@ -198,6 +198,15 @@ class TestOauth2Session(unittest.TestCase):
         self.assertEqual(self.refresh_token, session.refresh_token)
         self.assertEqual(self.mock_requests, session.requests)
 
+    def test_get_refresh_token(self):
+        session = Oauth2Session(self.site_id,
+                                self.client_id,
+                                self.client_secret,
+                                refresh_token='ref_token')
+        session.update_token = Mock()
+        self.assertEqual('ref_token', session.get_refresh_token())
+        session.update_token.assert_called_once()
+
     def test__do_post(self):
         session = Oauth2Session(self.site_id,
                                 self.client_id,

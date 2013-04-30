@@ -80,6 +80,10 @@ class Oauth2Session(JirafeSession):
         self.client_id = client_id
         self.client_secret = client_secret
 
+    def get_refresh_token(self):
+        self.update_token()
+        return self.refresh_token
+
     def _get_token(self):
         if self.access_token is not None:
             return self.access_token
