@@ -15,14 +15,14 @@ class JirafeSession(object):
         self.requests = requests
 
     def get_header(self):
-        self.refresh_token()
+        self.update_token()
         auth_header = 'Bearer %s' % (self.access_token)
         return {'Authorization': auth_header}
 
     def invalidate(self):
         self.access_token = None
 
-    def refresh_token(self):
+    def update_token(self):
         if self.access_token is None:
             self.access_token = self._get_token()
         return self.access_token

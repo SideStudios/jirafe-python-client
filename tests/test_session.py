@@ -38,10 +38,10 @@ class TestJirafeSession(unittest.TestCase):
         }
         self.assertEqual(expected, self.session.get_header())
 
-    def test_refresh_token(self):
+    def test_update_token(self):
         self.session._get_token = Mock(return_value='token')
-        self.assertEqual('token', self.session.refresh_token())
-        self.assertEqual('token', self.session.refresh_token())
+        self.assertEqual('token', self.session.update_token())
+        self.assertEqual('token', self.session.update_token())
         self.session._get_token.assert_called_once()
 
     def test_invalidate(self):
