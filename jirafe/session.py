@@ -5,12 +5,14 @@ class JirafeSession(object):
                  site_id,
                  auth_url='https://accounts.jirafe.com/oauth2/authorize',
                  token_url='https://accounts.jirafe.com/oauth2/access_token',
-                 profile_url='https://accounts.jirafe.com/accounts/profile'):
+                 profile_url='https://accounts.jirafe.com/accounts/profile',
+                 requests=requests):
         self.access_token = None
         self.site_id = site_id
         self.profile_url = profile_url
         self.token_url = token_url
         self.auth_url = auth_url
+        self.requests = requests
 
     def get_header(self):
         self.refresh_token()
@@ -26,12 +28,13 @@ class JirafeSession(object):
         return self.access_token
 
     def get_profile(self, retry=0):
-        r = requests.get(self.profile_url, headers=self.get_header())
+        r = self.requests.get(self.profile_url, headers=self.get_header())
 
-        if r.status_code is not 200 and retry < 1:
-            self.invalidate()
-            return self.get_profile(1)
-        else:
+        if r.status_code == 403:
+            if retry < 1:
+                self.invalidate()
+                return self.get_profile(1)
+        elif r.status_code == 200:
             return r.json()
 
     def get_site(self):
@@ -63,24 +66,46 @@ class UsernameSession(JirafeSession):
             'client_secret': self.client_secret,
         }
 
-        r = requests.post(self.token_url, data=data)
+        r = self.requests.post(self.token_url, data=data)
 
         if r.status_code is 200:
             return r.json()['access_token']
 
-class AuthorizationHeaderSession(JirafeSession):
-    def __init__(self, site_id, auth_header, **kwargs):
-        self.auth_header = auth_header
-        super(AuthorizationHeaderSession, self).__init__(site_id, **kwargs)
+class Oauth2Session(JirafeSession):
+    def __init__(self, site_id, client_id, client_secret, code=None, refresh_token=None, access_token=None, **kwargs):
+        super(Oauth2Session, self).__init__(site_id, **kwargs)
+        self.code = code
+        self.access_token = access_token
+        self.refresh_token = refresh_token
+        self.client_id = client_id
+        self.client_secret = client_secret
 
     def _get_token(self):
-        if self.auth_header is None:
-            return None
+        if self.access_token is not None:
+            return self.access_token
 
-        values = self.auth_header.split(' ')
+        if self.refresh_token is not None:
+            data = {
+                'grant_type': 'refresh_token',
+                'client_id': self.client_id,
+                'client_secret': self.client_secret,
+                'refresh_token': self.refresh_token,
+            }
+            return self._do_post(data)
 
-        if len(values) is not 2:
-            return None
+        if self.code is not None:
+            data = {
+                'grant_type': 'authorization_code',
+                'client_id': self.client_id,
+                'client_secret': self.client_secret,
+                'code': self.code,
+            }
+            return self._do_post(data)
 
-        if values[0].lower() == 'bearer':
-            return values[1]
+    def _do_post(self, data):
+        r = self.requests.post(self.token_url, data=data)
+
+        if r.status_code is 200:
+            self.code = None
+            self.refresh_token = r.json()['refresh_token']
+            return r.json()['access_token']
