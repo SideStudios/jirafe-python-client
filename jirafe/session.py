@@ -84,6 +84,10 @@ class Oauth2Session(JirafeSession):
         self.update_token()
         return self.refresh_token
 
+    def get_auth_url(self, redirect_uri):
+        url_mask = "%s?client_id=%s&redirect_uri=%s&response_type=code"
+        return url_mask % (self.auth_url, self.client_id, redirect_uri)
+
     def _get_token(self):
         if self.access_token is not None:
             return self.access_token
