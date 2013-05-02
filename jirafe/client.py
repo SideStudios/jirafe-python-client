@@ -8,6 +8,15 @@ class JirafeClient(object):
         self.api_url = api_url if api_url.endswith('/') else api_url + '/'
         self.requests = requests
 
+    def category_change(self, session, data):
+        return self._put(session, 'category', data)
+
+    def cart_change(self, session, data):
+        return self._put(session, 'cart', data)
+
+    def order_change(self, session, data):
+        return self._put(session, 'order', data)
+
     def product_change(self, session, data):
         return self._put(session, 'product', data)
 
