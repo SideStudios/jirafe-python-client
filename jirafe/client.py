@@ -20,6 +20,9 @@ class JirafeClient(object):
     def product_change(self, session, data):
         return self._put(session, 'product', data)
 
+    def customer_change(self, session, data):
+        return self._put(session, 'customer', data)
+
     def _get_url(self, session, path):
         url_data = {
             'url': self.api_url,
