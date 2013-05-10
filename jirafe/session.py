@@ -49,6 +49,15 @@ class JirafeSession(object):
     def _get_token(self):
         raise NotImplementedError
 
+    def __getstate__(self):
+        self.requests = None
+        return self.__dict__
+
+    def __setstate__(self, d):
+        self.__dict__.update(d)
+        self.requests = requests
+
+
 class UsernameSession(JirafeSession):
     def __init__(self, site_id, username, password, client_id, client_secret, **kwargs):
         self.username = username
