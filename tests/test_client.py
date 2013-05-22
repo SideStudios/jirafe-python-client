@@ -140,9 +140,10 @@ class TestJirafeSession(unittest.TestCase):
             "data": data_string,
             "headers": auth_header
         }
-        json_response = {'success': False, 'error_type': 'unknown'}
+        json_response = {'success': False, 'error_type': 'unknown', 'raw': 'response text'}
         mock_response = Mock()
         mock_response.status_code = 503
+        mock_response.text = 'response text'
         self.requests.put = Mock(return_value=mock_response)
 
         actual_response = self.client._put(session, path, data_string)

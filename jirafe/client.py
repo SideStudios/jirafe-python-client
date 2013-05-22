@@ -67,4 +67,5 @@ class JirafeClient(object):
             return {
                 'success': False,
                 'error_type': 'unknown',
+                'raw': response.text
             }
