@@ -42,7 +42,7 @@ class JirafeSession(object):
 
         if profile and 'sites' in profile:
             try:
-                return next(s for s in profile['sites'] if s['id'] == self.site_id)
+                return next(s for s in profile['sites'] if str(s['id']) == str(self.site_id))
             except StopIteration:
                 pass
 
