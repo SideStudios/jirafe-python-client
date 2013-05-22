@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name="jirafe-python-client",
-    version="0.4.1",
+    version="0.5",
     url="https://github.com/jirafe/jirafe-python-client",
     packages=["jirafe"],
     license="Copyright 2013, Jirafe under MIT License",
