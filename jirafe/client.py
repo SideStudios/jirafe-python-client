@@ -2,13 +2,14 @@ import json
 import requests
 
 class JirafeClient(object):
-    version = 'v1'
     url_mask = '{url}{version}/{site_id}/{path}'
     GET = 'get'
     PUT = 'put'
-    def __init__(self, api_url='https://api.jirafe.com/', requests=requests):
+    def __init__(self,
+                 api_url='https://api.jirafe.com/', requests=requests, version='v1'):
         self.api_url = api_url if api_url.endswith('/') else api_url + '/'
         self.requests = requests
+        self.version = version
 
     def category_change(self, session, data):
         return self._put(session, 'category', data)
