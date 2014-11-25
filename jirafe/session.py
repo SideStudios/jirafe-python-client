@@ -28,14 +28,25 @@ class JirafeSession(object):
         return self.access_token
 
     def get_profile(self, retry=0):
-        r = self.requests.get(self.profile_url, headers=self.get_header())
+        if hasattr(self, 'cached_profile'):
+            return self.cached_profile
+
+        url = self.profile_url
+        if self.site_id is not None:
+            url = "{url}{slash}site/{site_id}/".format(
+                url=url,
+                slash='' if url.endswith('/') else '/',
+                site_id=self.site_id
+            )
+        r = self.requests.get(url, headers=self.get_header())
 
         if r.status_code == 403:
             if retry < 1:
                 self.invalidate()
                 return self.get_profile(1)
         elif r.status_code == 200:
-            return r.json()
+            self.cached_profile = r.json()
+            return self.cached_profile
 
     def get_site(self):
         profile = self.get_profile()
